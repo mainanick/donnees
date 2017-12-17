@@ -21,8 +21,8 @@ class Product(ds.Model):
 >>> print(product)
 <Product [id=1]>
 
->>> product = Product.all()
->>> print(product)
+>>> products = Product.all()
+>>> print(products)
 <Product Set[2]>
 
 #calls the db again to fetch category
@@ -32,10 +32,15 @@ class Product(ds.Model):
 >>> product = Product.fetch('category').get(name='cola')
 #does not call db, already fetched category
 >>> print(product.category)
-<Category [id=1]>
+<Category Set[1]>
 
 
 >>> import pandas
 >>> isinstance(users, pandas.DataFrame)
 True
+
+>>> products = Product.all(limit=1000)
+>>> print(products)
+<Product Set[1000]>
+
 ```
