@@ -5,11 +5,12 @@
 class Category(ds.Model):
     # If table_name is not specified the class name(lowercased) is assumed to be the table name
     table_name = 'donne_category'
-    fields = ['name', 'id']
+    fields = ('name', 'id',)
 
 class Product(ds.Model):
-    fields = ['name', 'category']
-    related = [Category]
+    fields = ('name', 'category',)
+    exclude = ('price',)
+    related = (Category,)
 
 
 >>> category = Category.get(name='donnees')
