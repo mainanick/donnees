@@ -15,6 +15,5 @@ Basic Example:
 >>> print(category)
 <Category Set[1]>
 """
-import requests
 
 from donnees.models import Model
