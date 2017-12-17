@@ -14,6 +14,7 @@ Basic Example:
 
 >>> print(category)
 <Category Set[1]>
+>>> category_dataframe = category.df
 """
 
 from donnees.models import Model
