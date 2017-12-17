@@ -18,6 +18,13 @@ class Product(ds.Model):
 >>> category = Category.get(name='donnees')
 
 >>> product = Product.get(name='cola')
+>>> print(product)
+<Product [id=1]>
+
+>>> product = Product.all()
+>>> print(product)
+<Product Set[2]>
+
 #calls the db again to fetch category
 >>> c = product.category
 
@@ -25,8 +32,10 @@ class Product(ds.Model):
 >>> product = Product.fetch('category').get(name='cola')
 #does not call db, already fetched category
 >>> print(product.category)
+<Category [id=1]>
 
 
 >>> import pandas
 >>> isinstance(users, pandas.DataFrame)
+True
 ```
