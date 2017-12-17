@@ -36,7 +36,8 @@ class Product(ds.Model):
 
 
 >>> import pandas
->>> isinstance(users, pandas.DataFrame)
+>>> category_df = category.df # Pandas DataFrame
+>>> isinstance(category_df, pandas.DataFrame)
 True
 
 >>> products = Product.all(limit=1000)
