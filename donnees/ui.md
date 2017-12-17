@@ -1,11 +1,13 @@
 
+A pandas.DataFrame ORM
 ```python
 >>> import donnees as ds
 
 class Category(ds.Model):
-    # If table_name is not specified the class name(lowercased) is assumed to be the table name
+    # Optional: If table_name is not specified the class name(lowercased) is assumed to be the table name
     table_name = 'donne_category'
-    fields = ('name', 'id',)
+    # Optional: if not given all fields are fetched
+    fields = ('name',)
 
 class Product(ds.Model):
     fields = ('name', 'category',)
@@ -21,7 +23,7 @@ class Product(ds.Model):
 
 # Uses one sql statement to fetch related field
 >>> product = Product.fetch('category').get(name='cola')
-#does not call db already fetched
+#does not call db, already fetched category
 >>> print(product.category)
 
 
