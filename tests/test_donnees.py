@@ -34,7 +34,7 @@ class DonneesTests(BaseTestSetup):
         self.assertFalse(Messages in Messages.related)
 
     def test_model_get(self):
-        messages = Messages.get(name='Nick')
+        messages = Messages.get()
         
         self.assertIsInstance(messages[0].id, UUID)
         self.assertIsInstance(messages, QueryResult)
@@ -53,7 +53,7 @@ class DonneesTests(BaseTestSetup):
         pass
 
     def test_model_to_dataframe(self):
-        messages = Messages.get(name='Nick')
+        messages = Messages.get(text='Test 2', sentiment=1)
         dataframe = messages.df
-        
+        print(messages)
         self.assertIsInstance(dataframe, pd.DataFrame)

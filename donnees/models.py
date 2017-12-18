@@ -9,7 +9,7 @@ class Model(Query):
     related = None    
 
     @classmethod
-    def get(cls, *args, **kwargs):
+    def get(cls, **kwargs):
         results, sql = cls.select(
             table=cls.table_name, columns=cls.fields, **kwargs)        
         return cls.build_response(results, sql)

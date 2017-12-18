@@ -23,14 +23,14 @@ class QueryResult(object):
 
     @property
     def sql(self):
+        """Return the last run sql statement"""
         return self._sql
 
     @property
     def df(self):
         """Returns a Pandas DataFrame instance"""
-        record = pd.DataFrame.from_records(self._results)
-
-        return record
+        dataframe = pd.DataFrame.from_records(self._results)
+        return dataframe
 
     @property
     def results(self):
@@ -45,10 +45,17 @@ class Query(object):
         return self.db.execute(sql), sql
 
     @classmethod
-    def select(self, table, columns, *args, **kwargs):
+    def select(self, table, columns, **kwargs):
         sql = "SELECT {columns} FROM {table_name}"
-        _columns = ",".join([c for c in columns]
-                            ) if columns is not None else "*"
+        _columns = ",".join([c for c in columns]) if columns is not None else "*"
         sql = sql.format(columns=_columns, table_name=table)
+
+        # Add where clause
+        if kwargs:
+            where = ["{}='{}'".format(field, value) for field, value in kwargs.items()]
+            sql_where = " AND ".join([w for w in where])
+            
+            sql = "{sql} WHERE {where}".format(sql=sql, where=sql_where)
+
 
         return self.db.execute(sql), sql
