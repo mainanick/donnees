@@ -1,3 +1,23 @@
+# Copyright (c) 2017 Maina Nick
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE
+
 import pandas as pd
 from donnees.db import DatabaseConnection
 
@@ -42,20 +62,26 @@ class Query(object):
 
     @classmethod
     def raw_query(self, sql):
+        """Execute a raw query"""
         return self.db.execute(sql), sql
 
     @classmethod
-    def select(self, table, columns, **kwargs):
+    def select(self, table, columns=None, **where):
+        """Select data from a database
+        params: table The table name
+        params: columns The columns to be selected
+        """
         sql = "SELECT {columns} FROM {table_name}"
-        _columns = ", ".join([c for c in columns]) if columns is not None else "*"
+        
+        #select every column if column is not specified
+        _columns = "*" if columns is None else ", ".join([c for c in columns])
         sql = sql.format(columns=_columns, table_name=table)
 
-        # Add where clause
-        if kwargs:
-            where = ["{}='{}'".format(field, value) for field, value in kwargs.items()]
-            sql_where = " AND ".join([w for w in where])
+        # Add Where Fields
+        if where:
+            where_clauses = ["{}='{}'".format(field, value) for field, value in where.items()]
+            sql_where = " AND ".join([w for w in where_clauses])
             
             sql = "{sql} WHERE {where}".format(sql=sql, where=sql_where)
-
 
         return self.db.execute(sql), sql
