@@ -33,4 +33,4 @@ class Messages(ds.Model):
 
 
 class MsgKlass(ds.Model):
-    table_name = "jadili_message" 
+    table_name = "jadili_message"

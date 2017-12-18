@@ -31,7 +31,7 @@ class QueryResult(object):
 
     def __getitem__(self, key):
         if self.results:
-            return self._results[key]        
+            return self._results[key]
 
     def __iter__(self):
         return iter(self._results)
@@ -48,7 +48,7 @@ class QueryResult(object):
     def df(self):
         """Returns a Pandas DataFrame instance"""
         import pandas
-        
+
         dataframe = pandas.DataFrame.from_records(self._results)
         return dataframe
 
@@ -73,20 +73,22 @@ class Query(object):
         params: columns The columns to be selected
         """
         sql = "SELECT {columns} FROM {table_name}"
-        
-        #select every column if column is not specified
+
+        # select every column if column is not specified
         if columns is None:
             _columns = "*"
         else:
-            _columns =  ", ".join(["{}.{}".format(table,c) for c in columns])
-        
+            _columns = ", ".join(["{}.{}".format(table, c) for c in columns])
+
         sql = sql.format(columns=_columns, table_name=table)
 
         # Add Where Fields
         if where:
-            where_clauses = ["{}.{}='{}'".format(table, field, value) for field, value in where.items()]
-            sql_where = " AND ".join([w for w in where_clauses])
+            where_clauses = ["{}.{}='{}'".format(
+                table, field, value) for field, value in where.items()]
             
+            sql_where = " AND ".join([w for w in where_clauses])
+
             sql = "{sql} WHERE {where};".format(sql=sql, where=sql_where)
 
         return self.db.execute(sql), sql

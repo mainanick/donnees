@@ -25,7 +25,8 @@ from sqlalchemy import create_engine
 
 class DatabaseConnection(object):
     _config = None
-    engine = None
+    _engine = None
+    _connection = None
 
     @classmethod
     def config(self):
@@ -40,13 +41,14 @@ class DatabaseConnection(object):
 
     @classmethod
     def connect(self):
-        self.engine = create_engine(self.config())
+        if self._engine is None:
+            self._engine = create_engine(
+                self.config(), pool_size=10, max_overflow=0)
+            self._connection = self._engine.connect()
+        return self._connection
 
     @classmethod
     def execute(self, query):
-        if self.engine is None:
-            self.connect()
-        connection = self.engine.connect()
+        connection = self.connect()
         results = connection.execute(query).fetchall()
-        connection.close()
         return results
