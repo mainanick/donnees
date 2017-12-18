@@ -47,7 +47,7 @@ class Query(object):
     @classmethod
     def select(self, table, columns, **kwargs):
         sql = "SELECT {columns} FROM {table_name}"
-        _columns = ",".join([c for c in columns]) if columns is not None else "*"
+        _columns = ", ".join([c for c in columns]) if columns is not None else "*"
         sql = sql.format(columns=_columns, table_name=table)
 
         # Add where clause

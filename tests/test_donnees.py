@@ -18,6 +18,9 @@ class Messages(ds.Model):
     fields = ('text', 'id', 'sentiment')
     related = (Contacts,)
 
+class MsgKlass(ds.Model):
+    table_name = "jadili_message"    
+
 
 class BaseTestSetup(unittest.TestCase):
     def setUp(self):
@@ -34,9 +37,7 @@ class DonneesTests(BaseTestSetup):
         self.assertFalse(Messages in Messages.related)
 
     def test_model_get(self):
-        messages = Messages.get()
-        
-        self.assertIsInstance(messages[0].id, UUID)
+        messages = Messages.get()        
         self.assertIsInstance(messages, QueryResult)
 
     def test_model_raw_query(self):
@@ -46,14 +47,16 @@ class DonneesTests(BaseTestSetup):
         
         self.assertEqual(sql, run_sql)
 
-    def test_model_get_all_field(self):
-        pass
-
-    def test_model_get_related(self):
-        pass
+    def test_model_can_get_all_field_when_fields_is_none(self):       
+        messages = MsgKlass.get()        
+        expected_sql = "SELECT * FROM jadili_message"
+        sql = messages.sql        
+        self.assertEqual(sql, expected_sql)
 
     def test_model_to_dataframe(self):
         messages = Messages.get(text='Test 2', sentiment=1)
         dataframe = messages.df
-        print(messages)
+        expected_sql = "SELECT text, id, sentiment FROM jadili_message WHERE text='Test 2' AND sentiment='1'"
+        sql = messages.sql        
+        self.assertEqual(sql, expected_sql)
         self.assertIsInstance(dataframe, pd.DataFrame)
