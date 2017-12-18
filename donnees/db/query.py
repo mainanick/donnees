@@ -18,7 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE
 
-import pandas as pd
 from donnees.db import DatabaseConnection
 
 
@@ -49,7 +48,9 @@ class QueryResult(object):
     @property
     def df(self):
         """Returns a Pandas DataFrame instance"""
-        dataframe = pd.DataFrame.from_records(self._results)
+        import pandas
+        
+        dataframe = pandas.DataFrame.from_records(self._results)
         return dataframe
 
     @property
