@@ -42,10 +42,12 @@ class DonneesTests(BaseTestSetup):
         self.assertIn(models.Contacts, models.Messages.related)
         self.assertFalse(models.Messages in models.Messages.related)
 
-    def test_model_get(self):
+    def test_model_get(self):        
         messages = models.Messages.get()        
         
         self.assertIsInstance(messages, QueryResult)
+        self.assertIsInstance(messages.results, list)        
+
 
     def test_model_raw_query(self):
         sql = "SELECT id, text FROM jadili_message"

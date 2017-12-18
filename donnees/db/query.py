@@ -31,8 +31,7 @@ class QueryResult(object):
 
     def __getitem__(self, key):
         if self.results:
-            return self._results[key]
-        raise ValueError("QuerySet Item not found")
+            return self._results[key]        
 
     def __iter__(self):
         return iter(self._results)
@@ -55,7 +54,8 @@ class QueryResult(object):
 
     @property
     def results(self):
-        yield self._results
+        """Return the original result from db execute function"""
+        return self._results
 
 
 class Query(object):

@@ -31,5 +31,6 @@ class Messages(ds.Model):
     fields = ('text', 'id', 'sentiment')
     related = (Contacts,)
 
+
 class MsgKlass(ds.Model):
     table_name = "jadili_message" 
