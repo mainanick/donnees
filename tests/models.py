@@ -28,7 +28,7 @@ class Contacts(ds.Model):
 
 class Messages(ds.Model):
     table_name = "jadili_message"
-    fields = ('text', 'id', 'sentiment')
+    fields = ('text', 'sentiment')
     related = (Contacts,)
 
 
