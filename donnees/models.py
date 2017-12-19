@@ -37,9 +37,8 @@ class Model(Query):
     @classmethod
     def query(cls, sql):
         result, sql = cls.raw_query(sql)
-        return cls.build_response(result, sql, raw_query=True)        
+        return cls.build_response(result, sql, raw_query=True)
 
-    
     @classmethod
     def build_response(cls, results, sql, raw_query=False):
         if cls.fields is None and not raw_query:
@@ -52,3 +51,4 @@ class Model(Query):
 
         # TODO get the table columns from db
         return QueryResult(results, sql)
+

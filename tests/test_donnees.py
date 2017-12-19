@@ -23,7 +23,6 @@ import unittest
 
 import pandas as pd
 
-import donnees as ds
 from donnees.db import QueryResult
 from tests import models
 
@@ -92,9 +91,8 @@ class DonneesTests(BaseTestSetup):
         self.assertEqual(messages.sql, expected_sql)
         self.assertEqual(messages2.sql, expected_sql2)
 
-    
     def test_utils_attrvalue(self):
-        from donnees.utils import Attrvalue        
-        JOIN = Attrvalue({'INNER':"INNER JOIN", 'OUTER':"OUTER JOIN"})
-        
+        from donnees.utils import Attrvalue
+        JOIN = Attrvalue({'INNER': "INNER JOIN", 'OUTER': "OUTER JOIN"})
+
         self.assertEqual(JOIN.INNER, "INNER JOIN")

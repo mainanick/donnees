@@ -86,7 +86,7 @@ class Query(object):
         if where:
             where_clauses = ["{}.{}='{}'".format(
                 table, field, value) for field, value in where.items()]
-            
+
             sql_where = " AND ".join([w for w in where_clauses])
 
             sql = "{sql} WHERE {where};".format(sql=sql, where=sql_where)

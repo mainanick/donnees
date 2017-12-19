@@ -18,15 +18,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE
 
+
 class Attrvalue(dict):
     """Allow Getting value of dict from attribute
-    
+
     Example:
       JOIN = Attrvalue({'INNER':"INNER JOIN", 'OUTER':"OUTER JOIN"})
       print(JOIN.INNER) # prints INNER JOIN
     """
-    def __init__(self, elements):
-        super().__init__(elements)
-    
+
     def __getattribute__(self, attr):
-        return super().__getitem__(attr)     
+        return super().__getitem__(attr)

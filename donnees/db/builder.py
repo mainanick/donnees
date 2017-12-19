@@ -20,7 +20,7 @@
 
 from donnees.utils import Attrvalue
 
-JOIN = Attrvalue({'INNER':"INNER JOIN", 'OUTER':"OUTER JOIN"})
+JOIN = Attrvalue({'INNER': "INNER JOIN", 'OUTER': "OUTER JOIN"})
 
 
 class QueryBuilder(object):
@@ -28,39 +28,37 @@ class QueryBuilder(object):
         raise NotImplementedError
 
 
-class Select(QueryBuilder):    
+class Select(QueryBuilder):
     def __init__(self, columns, table, clauses):
-        self.clauses = clauses        
-    
+        self.clauses = clauses
+
     def build(self):
-        sql= "SELECT {columns} FROM {table} {clauses};"
+        sql = "SELECT {columns} FROM {table} {clauses};"
         for clause in self.clauses:
-            sql +=clause.build()       
+            sql += clause.build()
         return "built"
 
 
 class Join(QueryBuilder):
-    def __init__(self, join_by):        
+    def __init__(self, join_by):
         self.join = join_by
-    
-    def build(self):        
+
+    def build(self):
         sql = JOIN.INNER + " {table} ON {fields} "
-        pass
 
 
 class Order(QueryBuilder):
     def __init__(self, columns, order_type=None):
         self.columns = columns
         self.order = order_type
-    
+
     def build(self):
         sql = " ORDER BY {columns} {order_type}"
-        pass
 
 
 class Where(QueryBuilder):
     def __init__(self, where):
         self.where = where
-    
+
     def build(self):
         pass
