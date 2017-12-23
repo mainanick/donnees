@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE
 
-from donnees.db.builder import Select, Where
+from donnees.db.builder import Limit, Select, Where
 from donnees.db import DatabaseConnection
 
 
@@ -68,9 +68,15 @@ class Query(object):
         return self.db.execute(sql), sql
 
     @classmethod
-    def select(self, table, columns="*", **where):
+    def select(self, table, columns="*", **kwargs):
         sql = Select(table, columns)
-        if where:
-            sql.clauses = [Where(**where)]
+        limit = kwargs.pop('limit', None)
+
+        sql.clauses = []
+
+        if kwargs:
+            sql.clauses.append(Where(**kwargs))
+        if limit:
+            sql.clauses.append(Limit(limit))
         sql = sql.build()
         return self.db.execute(sql), sql

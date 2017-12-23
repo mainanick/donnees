@@ -90,3 +90,13 @@ class DonneesTests(BaseTestSetup):
 
         self.assertEqual(messages.sql, expected_sql)
         self.assertEqual(messages2.sql, expected_sql2)
+
+    def test_get_all(self):
+        messages = models.Messages.all()
+        expected_sql = "SELECT jadili_message.text, jadili_message.sentiment FROM jadili_message;"
+        self.assertEqual(messages.sql, expected_sql)
+
+    def test_get_all_with_limits(self):
+        messages = models.Messages.all(limit=2)
+        expected_sql = "SELECT jadili_message.text, jadili_message.sentiment FROM jadili_message LIMIT 2;"
+        self.assertEqual(messages.sql, expected_sql)

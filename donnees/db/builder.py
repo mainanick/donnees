@@ -31,7 +31,7 @@ class QueryBuilder(object):
 class Select(QueryBuilder):
     def __init__(self, table, columns="*", *clauses):
         self.columns = columns or "*"
-        self.clauses = clauses
+        self.clauses = list(clauses)
         self.table = table
 
     def build(self):
@@ -100,3 +100,11 @@ class Where(QueryBuilder):
         sql = "WHERE {where}".format(where=where)
 
         return sql
+
+
+class Limit(QueryBuilder):
+    def __init__(self, limit):
+        self.limit = limit
+
+    def build(self):
+        return "LIMIT {}".format(self.limit)

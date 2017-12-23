@@ -29,10 +29,14 @@ class Model(Query):
     related = None
 
     @classmethod
-    def get(cls, **where):
+    def get(cls, **kwargs):
         results, sql = cls.select(
-            table=cls.table_name, columns=cls.fields, **where)
+            table=cls.table_name, columns=cls.fields, **kwargs)
         return cls.build_response(results, sql)
+
+    @classmethod
+    def all(cls, **kwargs):
+        return cls.get(**kwargs)
 
     @classmethod
     def query(cls, sql):
