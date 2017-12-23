@@ -20,14 +20,20 @@ A pandas.DataFrame ORM
 class Category(ds.Model):    
     table_name = 'donne_category'
     # Optional: if not given all fields are fetched
-    fields = ('name',)
+    fields = ('id', 'name',)
 
 class Product(ds.Model):
     table_name = 'donne_products'
     fields = ('name', 'category',)    
     related = (Category,)
 
+#Fetch all
+>>> category = Category.all()
 
+#Fetch but limit only first 1000
+>>> category = Category.all(limit=1000)
+
+#Get Specific
 >>> category = Category.get(name='donnees')
 
 # Result Set
@@ -36,6 +42,8 @@ class Product(ds.Model):
 
 # Fields
 first_category = category.results[0]
+>>> print(first_category.id)
+1
 >>> print(first_category.name)
 "Drinks"
 
@@ -46,11 +54,6 @@ True
 
 # SQL statement used
 >>> print(category.sql)
-"SELECT * FROM category WHERE name='donnees';"
-
-
->>> products = Product.all(limit=1000)
->>> print(products)
-<Product [1000]>
+"SELECT id, name FROM category WHERE name='donnees';"
 
 ```
