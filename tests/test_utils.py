@@ -18,36 +18,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE
 
-from collections import namedtuple
-
-from donnees.db import Query, QueryResult
+import unittest
 
 
-class Model(Query):
-    table_name = None
-    fields = None
-    related = None
+class DonneesTests(unittest.TestCase):
+    def test_utils_attrvalue(self):
+        from donnees.utils import Attrvalue
+        JOIN = Attrvalue({'INNER': "INNER JOIN", 'OUTER': "OUTER JOIN"})
 
-    @classmethod
-    def get(cls, **where):
-        results, sql = cls.select(
-            table=cls.table_name, columns=cls.fields, **where)
-        return cls.build_response(results, sql)
-
-    @classmethod
-    def query(cls, sql):
-        result, sql = cls.raw_query(sql)
-        return cls.build_response(result, sql, raw_query=True)
-
-    @classmethod
-    def build_response(cls, results, sql, raw_query=False):
-        if cls.fields is None and not raw_query:
-            return QueryResult(results, sql)
-
-        if not raw_query:
-            response_tuple = namedtuple(cls.__name__, cls.fields)
-            _response = [r for r in map(response_tuple._make, results)]
-            return QueryResult(_response, sql)
-
-        # TODO get the table columns from db
-        return QueryResult(results, sql)
+        self.assertEqual(JOIN.INNER, "INNER JOIN")

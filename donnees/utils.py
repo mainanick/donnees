@@ -29,3 +29,35 @@ class Attrvalue(dict):
 
     def __getattribute__(self, attr):
         return super().__getitem__(attr)
+
+
+def format(formatter, payload):
+    """Returns a list of formatted strings
+    Example:
+    >>> formatter = "{} is {}"
+    >>> data = {"name":"donnees", "age":1}
+    >>> result = format(formatter, data)
+    >>> print(result[0])
+    name is donnees
+    >>> print(result[1])
+    age is 1
+
+    Or
+
+    >>> formatter = lamdba x: "{} haha.format(x)"
+    >>> data = ["name", "age"]
+    >>> result = format(formatter, data)
+    >>> print(result[0])
+    name haha
+    >>> print(result[1])
+    age haha
+    """
+    if not isinstance(payload, (list, tuple, dict)):
+        raise ValueError("Unexpected Payload {}".format(payload))
+
+    if isinstance(payload, (list, tuple)):
+        if callable(formatter):
+            return [formatter(k) for k in payload]
+        return [formatter.format(k) for k in payload]
+    # At this point the payload is dict
+    return [formatter.format(k, v) for k, v in payload.items()]

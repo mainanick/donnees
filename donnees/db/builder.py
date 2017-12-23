@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE
 
-from donnees.utils import Attrvalue
+from donnees.utils import Attrvalue, format
 
 JOIN = Attrvalue({'INNER': "INNER JOIN", 'OUTER': "OUTER JOIN"})
 
@@ -29,36 +29,74 @@ class QueryBuilder(object):
 
 
 class Select(QueryBuilder):
-    def __init__(self, columns, table, clauses):
+    def __init__(self, table, columns="*", *clauses):
+        self.columns = columns
         self.clauses = clauses
+        self.table = table
 
     def build(self):
-        sql = "SELECT {columns} FROM {table} {clauses};"
-        for clause in self.clauses:
-            sql += clause.build()
-        return "built"
+        if self.columns != "*":
+            x = ["{}.{}".format(self.table, c) for c in self.columns]
+            self.columns = ", ".join(x)
+
+        if not self.clauses:
+            return "SELECT {} FROM {}".format(self.columns, self.table)
+
+        _clauses = format(lambda clause: clause.build(), self.clauses)
+
+        sql = " ".join(_clauses)
+        built_sql = "SELECT {} FROM {} {}".format(
+            self.columns, self.table, sql)
+
+        return built_sql
 
 
 class Join(QueryBuilder):
-    def __init__(self, join_by):
-        self.join = join_by
+    """Example:
+    INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+    """
+
+    def __init__(self, current_table, current_column, on_table,  on_column):
+        self.current_table = current_table
+        self.current_column = current_column
+        self.on_table = on_table
+        self.on_column = on_column
 
     def build(self):
-        sql = JOIN.INNER + " {table} ON {fields} "
+        sql = JOIN.INNER + " {} ON {}.{} = {}.{}"
+        return sql.format(self.on_table, self.current_table,
+                          self.current_column, self.on_table, self.on_column)
 
 
 class Order(QueryBuilder):
-    def __init__(self, columns, order_type=None):
+    def __init__(self, *columns):
         self.columns = columns
-        self.order = order_type
+
+    @classmethod
+    def get_order_type(cls, column):
+        """Returns the formatted string and order type(either DESC or ASC) """
+        if column[0] == '-':
+            return "{} {}".format(column[1:], "DESC")
+        return "{} {}".format(column, "ASC")
 
     def build(self):
-        sql = " ORDER BY {columns} {order_type}"
+        results = format(self.get_order_type, self.columns)
+
+        join_orders = ", ".join(results)
+        sql = "ORDER BY {}".format(join_orders)
+
+        return sql
 
 
 class Where(QueryBuilder):
-    def __init__(self, where):
+    def __init__(self, **where):
         self.where = where
 
     def build(self):
-        pass
+
+        clauses = format("{}='{}'", self.where)
+
+        where = " AND ".join([w for w in clauses])
+        sql = "WHERE {where}".format(where=where)
+
+        return sql
