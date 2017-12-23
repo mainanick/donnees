@@ -17,21 +17,22 @@ class Product(ds.Model):
 
 >>> category = Category.get(name='donnees')
 
->>> product = Product.get(name='cola')
->>> print(product)
-<Product [id=1]>
+# Result Set
+>>> print(category.results)
+<Category [1]>
 
->>> products = Product.all()
->>> print(products)
-<Product Set[2]>
-
+# Pandas DataFrame
 >>> import pandas
->>> category_df = category.df # Pandas DataFrame
->>> isinstance(category_df, pandas.DataFrame)
+>>> isinstance(category.df, pandas.DataFrame)
 True
+
+# SQL statement used
+>>> print(category.sql)
+"SELECT * FROM category WHERE name='donnees';"
+
 
 >>> products = Product.all(limit=1000)
 >>> print(products)
-<Product Set[1000]>
+<Product [1000]>
 
 ```
