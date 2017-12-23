@@ -21,6 +21,7 @@
 from donnees.db.builder import Select, Where
 from donnees.db import DatabaseConnection
 
+
 class QueryResult(object):
     _sql = None
     _results = None
@@ -67,7 +68,7 @@ class Query(object):
         return self.db.execute(sql), sql
 
     @classmethod
-    def select(self, table, columns="*", **where):            
+    def select(self, table, columns="*", **where):
         sql = Select(table, columns)
         if where:
             sql.clauses = [Where(**where)]

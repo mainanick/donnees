@@ -29,7 +29,7 @@ class Model(Query):
     related = None
 
     @classmethod
-    def get(cls, **where):        
+    def get(cls, **where):
         results, sql = cls.select(
             table=cls.table_name, columns=cls.fields, **where)
         return cls.build_response(results, sql)

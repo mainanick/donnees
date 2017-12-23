@@ -51,10 +51,10 @@ class DonneesQueryTests(unittest.TestCase):
     def test_build_select_with_clauses(self):
         expected_sql = "SELECT * FROM message WHERE name='nick';"
         expected_sql2 = "SELECT * FROM message WHERE name='nick' INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;"
-        
+
         where = builder.Where(name="nick")
-        sql = builder.Select("message", "*", where).build()        
-        
+        sql = builder.Select("message", "*", where).build()
+
         join = builder.Join("Orders", "CustomerID", "Customers",  "CustomerID")
         sql2 = builder.Select("message", "*", where, join).build()
 
