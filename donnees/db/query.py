@@ -67,10 +67,9 @@ class Query(object):
         return self.db.execute(sql), sql
 
     @classmethod
-    def select(self, table, columns="*", **where):        
+    def select(self, table, columns="*", **where):            
+        sql = Select(table, columns)
         if where:
-            where_clause = Where(**where)
-            sql = Select(table, columns, where_clause).build()
-        else:
-            sql = Select(table, columns).build()
+            sql.clauses = [Where(**where)]
+        sql = sql.build()
         return self.db.execute(sql), sql
