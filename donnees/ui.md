@@ -3,15 +3,14 @@ A pandas.DataFrame ORM
 ```python
 >>> import donnees as ds
 
-class Category(ds.Model):
-    # Optional: If table_name is not specified the class name(lowercased) is assumed to be the table name
+class Category(ds.Model):    
     table_name = 'donne_category'
     # Optional: if not given all fields are fetched
     fields = ('name',)
 
 class Product(ds.Model):
-    fields = ('name', 'category',)
-    exclude = ('price',)
+    table_name = 'donne_products'
+    fields = ('name', 'category',)    
     related = (Category,)
 
 
