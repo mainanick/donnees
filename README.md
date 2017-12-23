@@ -34,6 +34,11 @@ class Product(ds.Model):
 >>> print(category.results)
 <Category [1]>
 
+# Fields
+first_category = category.results[0]
+>>> print(first_category.name)
+"Drinks"
+
 # Pandas DataFrame
 >>> import pandas
 >>> isinstance(category.df, pandas.DataFrame)
