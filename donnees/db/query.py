@@ -18,8 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE
 
+from donnees.db.builder import Select, Where
 from donnees.db import DatabaseConnection
-
 
 class QueryResult(object):
     _sql = None
@@ -67,28 +67,10 @@ class Query(object):
         return self.db.execute(sql), sql
 
     @classmethod
-    def select(self, table, columns=None, **where):
-        """Select data from a database
-        params: table The table name
-        params: columns The columns to be selected
-        """
-        sql = "SELECT {columns} FROM {table_name}"
-
-        # select every column if column is not specified
-        if columns is None:
-            _columns = "*"
-        else:
-            _columns = ", ".join(["{}.{}".format(table, c) for c in columns])
-
-        sql = sql.format(columns=_columns, table_name=table)
-
-        # Add Where Fields
+    def select(self, table, columns="*", **where):        
         if where:
-            where_clauses = ["{}.{}='{}'".format(
-                table, field, value) for field, value in where.items()]
-
-            sql_where = " AND ".join([w for w in where_clauses])
-
-            sql = "{sql} WHERE {where};".format(sql=sql, where=sql_where)
-
+            where_clause = Where(**where)
+            sql = Select(table, columns, where_clause).build()
+        else:
+            sql = Select(table, columns).build()
         return self.db.execute(sql), sql

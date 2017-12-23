@@ -30,7 +30,7 @@ class QueryBuilder(object):
 
 class Select(QueryBuilder):
     def __init__(self, table, columns="*", *clauses):
-        self.columns = columns
+        self.columns = columns or "*"
         self.clauses = clauses
         self.table = table
 
@@ -40,12 +40,12 @@ class Select(QueryBuilder):
             self.columns = ", ".join(x)
 
         if not self.clauses:
-            return "SELECT {} FROM {}".format(self.columns, self.table)
+            return "SELECT {} FROM {};".format(self.columns, self.table)
 
         _clauses = format(lambda clause: clause.build(), self.clauses)
 
         sql = " ".join(_clauses)
-        built_sql = "SELECT {} FROM {} {}".format(
+        built_sql = "SELECT {} FROM {} {};".format(
             self.columns, self.table, sql)
 
         return built_sql

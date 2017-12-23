@@ -72,7 +72,7 @@ class DonneesTests(BaseTestSetup):
 
     def test_model_can_get_all_field_when_fields_is_none(self):
         messages = models.MsgKlass.get()
-        expected_sql = "SELECT * FROM jadili_message"
+        expected_sql = "SELECT * FROM jadili_message;"
 
         self.assertEqual(messages.sql, expected_sql)
 
@@ -85,8 +85,8 @@ class DonneesTests(BaseTestSetup):
     def test_get_select_where(self):
         messages = models.Messages.get(text='Test 2', sentiment=1)
         messages2 = models.Messages.get(text='Test 2')
-        expected_sql = "SELECT jadili_message.text, jadili_message.sentiment FROM jadili_message WHERE jadili_message.text='Test 2' AND jadili_message.sentiment='1';"
-        expected_sql2 = "SELECT jadili_message.text, jadili_message.sentiment FROM jadili_message WHERE jadili_message.text='Test 2';"
+        expected_sql = "SELECT jadili_message.text, jadili_message.sentiment FROM jadili_message WHERE text='Test 2' AND sentiment='1';"
+        expected_sql2 = "SELECT jadili_message.text, jadili_message.sentiment FROM jadili_message WHERE text='Test 2';"
 
         self.assertEqual(messages.sql, expected_sql)
         self.assertEqual(messages2.sql, expected_sql2)
