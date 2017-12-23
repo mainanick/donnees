@@ -25,16 +25,6 @@ class Product(ds.Model):
 >>> print(products)
 <Product Set[2]>
 
-#calls the db again to fetch category
->>> c = product.category
-
-# Uses one sql statement to fetch related field
->>> product = Product.fetch('category').get(name='cola')
-#does not call db, already fetched category
->>> print(product.category)
-<Category Set[1]>
-
-
 >>> import pandas
 >>> category_df = category.df # Pandas DataFrame
 >>> isinstance(category_df, pandas.DataFrame)
