@@ -28,7 +28,7 @@ class DonneesQueryTests(unittest.TestCase):
         sql = builder.Where(age=18, name="nick").build()
 
         self.assertEqual("WHERE age='18' AND name='nick'", sql)
-        self.assertFalse("WHERE x='1'" == sql)
+        self.assertFalse("WHERE age='1'" == sql)  # Test inclusion of AND
 
     def test_build_order(self):
         sql = builder.Order("-age").build()

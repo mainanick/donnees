@@ -29,24 +29,23 @@ class QueryBuilder(object):
 
 
 class Select(QueryBuilder):
-    def __init__(self, table, columns="*", *clauses):
+    def __init__(self, table, columns=None, *clauses):
         self.columns = columns or "*"
         self.clauses = list(clauses)
         self.table = table
 
     def build(self):
         if self.columns != "*":
-            x = ["{}.{}".format(self.table, c) for c in self.columns]
-            self.columns = ", ".join(x)
+            sql_columns = ["{}.{}".format(self.table, column) for column in self.columns]
+            self.columns = ", ".join(sql_columns)
 
         if not self.clauses:
             return "SELECT {} FROM {};".format(self.columns, self.table)
 
-        _clauses = format(lambda clause: clause.build(), self.clauses)
+        built_clauses = format(lambda clause: clause.build(), self.clauses)
 
-        sql = " ".join(_clauses)
-        built_sql = "SELECT {} FROM {} {};".format(
-            self.columns, self.table, sql)
+        sql = " ".join(built_clauses)        
+        built_sql = "SELECT {} FROM {} {};".format(self.columns, self.table, sql)
 
         return built_sql
 
@@ -74,7 +73,14 @@ class Order(QueryBuilder):
 
     @classmethod
     def get_order_type(cls, column):
-        """Returns the formatted string and order type(either DESC or ASC) """
+        """Returns the formatted string and order(either DESC or ASC)
+        Params:
+            column: Table Column
+        If column string begins with '-' the order is DESC else ASC
+        Example:
+            self.get_order_type("-age") == "age DESC"
+            self.get_order_type("age", "-name") == "age ASC, name DESC"
+        """
         if column[0] == '-':
             return "{} {}".format(column[1:], "DESC")
         return "{} {}".format(column, "ASC")
@@ -82,10 +88,9 @@ class Order(QueryBuilder):
     def build(self):
         results = format(self.get_order_type, self.columns)
 
-        join_orders = ", ".join(results)
-        sql = "ORDER BY {}".format(join_orders)
+        built_orders = ", ".join(results)
 
-        return sql
+        return "ORDER BY {}".format(built_orders)
 
 
 class Where(QueryBuilder):
@@ -93,13 +98,10 @@ class Where(QueryBuilder):
         self.where = where
 
     def build(self):
-
         clauses = format("{}='{}'", self.where)
-
         where = " AND ".join([w for w in clauses])
-        sql = "WHERE {where}".format(where=where)
 
-        return sql
+        return "WHERE {where}".format(where=where)
 
 
 class Limit(QueryBuilder):

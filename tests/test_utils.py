@@ -20,10 +20,18 @@
 
 import unittest
 
+from donnees.utils import Attrvalue, format
 
 class DonneesTests(unittest.TestCase):
-    def test_utils_attrvalue(self):
-        from donnees.utils import Attrvalue
+    def test_utils_attrvalue(self):        
         JOIN = Attrvalue({'INNER': "INNER JOIN", 'OUTER': "OUTER JOIN"})
 
         self.assertEqual(JOIN.INNER, "INNER JOIN")
+
+    def test_utils_format(self):        
+        formatter = "{} is {}"
+        data = {"name": "donnees", "age": 1}
+        result = format(formatter, data)
+
+        self.assertEqual(result[0], "name is donnees")
+        self.assertEqual(result[1], "age is 1")

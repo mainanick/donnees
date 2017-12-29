@@ -44,7 +44,7 @@ class Model(Query):
         return cls.build_response(result, sql, raw_query=True)
 
     @classmethod
-    def build_response(cls, results, sql, raw_query=False):
+    def build_response(cls, results, sql, raw_query=False):  # FIXME: Refactor this function
         if cls.fields is None and not raw_query:
             return QueryResult(results, sql)
 

@@ -50,8 +50,9 @@ class DonneesTests(BaseTestSetup):
         self.assertIsInstance(messages.results, list)
 
     def test_model_raw_query(self):
+        """Tests Donnes can exectue raw sql query"""
+        
         sql = "SELECT id, text FROM jadili_message"
-
         sql2 = "SELECT \
             jadili_message.id, \
             jadili_message.text, \
@@ -62,13 +63,16 @@ class DonneesTests(BaseTestSetup):
         messages = models.Messages.query(sql)
         messages2 = models.Messages.query(sql2)
 
-        run_sql = messages.sql
-        run_sql2 = messages2.sql
-
-        self.assertEqual(sql, run_sql)
-        self.assertEqual(sql2, run_sql2)
-        self.assertIsInstance(messages.df, pd.DataFrame)
-        self.assertIsInstance(messages2.df, pd.DataFrame)
+        self.assertEqual(sql, messages.sql)
+        self.assertEqual(sql2, messages2.sql)
+    
+    def test_return_run_sql(self):
+        """Tests if QuerySet.sql is string and the expected sql"""
+        messages = models.MsgKlass.get()
+        expected_sql = "SELECT * FROM jadili_message;"
+        
+        self.assertIsInstance(messages.sql, str)
+        self.assertEqual(messages.sql, expected_sql)
 
     def test_model_can_get_all_field_when_fields_is_none(self):
         messages = models.MsgKlass.get()
@@ -76,13 +80,14 @@ class DonneesTests(BaseTestSetup):
 
         self.assertEqual(messages.sql, expected_sql)
 
-    def test_model_to_dataframe(self):
+    def test_results_can_return_to_dataframe(self):
+        """Tests QueryResult.df is DataFrame"""
         messages = models.MsgKlass.get()
         expected_sql = "SELECT * FROM jadili_message"
 
         self.assertIsInstance(messages.df, pd.DataFrame)
 
-    def test_get_select_where(self):
+    def test_can_get_with_select_where(self):
         messages = models.Messages.get(text='Test 2', sentiment=1)
         messages2 = models.Messages.get(text='Test 2')
         expected_sql = "SELECT jadili_message.text, jadili_message.sentiment FROM jadili_message WHERE text='Test 2' AND sentiment='1';"
@@ -91,12 +96,12 @@ class DonneesTests(BaseTestSetup):
         self.assertEqual(messages.sql, expected_sql)
         self.assertEqual(messages2.sql, expected_sql2)
 
-    def test_get_all(self):
+    def test_can_get_all(self):
         messages = models.Messages.all()
         expected_sql = "SELECT jadili_message.text, jadili_message.sentiment FROM jadili_message;"
         self.assertEqual(messages.sql, expected_sql)
 
-    def test_get_all_with_limits(self):
+    def test_can_get_all_with_limits(self):
         messages = models.Messages.all(limit=2)
         expected_sql = "SELECT jadili_message.text, jadili_message.sentiment FROM jadili_message LIMIT 2;"
         self.assertEqual(messages.sql, expected_sql)
