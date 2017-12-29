@@ -44,7 +44,7 @@ def format(formatter, payload):
 
     Or
 
-    >>> formatter = lamdba x: "{} haha.format(x)"
+    >>> formatter = lamdba x: "{} haha".format(x)
     >>> data = ["name", "age"]
     >>> result = format(formatter, data)
     >>> print(result[0])
