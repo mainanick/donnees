@@ -53,7 +53,7 @@ def format(formatter, payload):
     age haha
     """
     if not isinstance(payload, (list, tuple, dict)):
-        raise ValueError("Unexpected Payload {}".format(payload))
+        raise ValueError("Unexpected Payload Type {} expected either dict, list or tuple".format(type(payload)))
 
     if isinstance(payload, (list, tuple)):
         if callable(formatter):
